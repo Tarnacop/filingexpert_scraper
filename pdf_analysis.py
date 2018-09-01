@@ -62,19 +62,22 @@ next_page_css_selector = "[ng-class=\"{disabled: noNext()}\"]"
 # --------------------------------------------------------- FUNCTION DEFINITIONS --------------------------------
 
 
-def load_main_page(url):
+def load_main_page(url, type):
     # Set the url to the page
     browser.get(url)
 
     time.sleep(random.randint(1, 3))
 
-    # Check if page loaded successfully
-    try:
-        WebDriverWait(browser, 120).until(EC.element_to_be_clickable((By.ID, canvas_login_button_id)))
-    except TimeoutException:
-        print("ERROR LOADING CANVAS PAGE: CHECK INTERNET CONNECTION")
-        browser.quit()
-        sys.exit(1)
+    if type == 1:
+        # Check if page loaded successfully
+        try:
+            WebDriverWait(browser, 120).until(EC.element_to_be_clickable((By.ID, canvas_login_button_id)))
+        except TimeoutException:
+            print("ERROR LOADING CANVAS PAGE: CHECK INTERNET CONNECTION")
+            browser.quit()
+            sys.exit(1)
+    else:
+        time.sleep(random.randint(4, 7))
 
     print("URL OPENED SUCCESSFULLY")
     print("CONFIGURATION PART")
