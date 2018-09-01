@@ -89,9 +89,7 @@ def canvas_login(user, pwd):
         username_field.clear()
         username_field.send_keys(user)
     except NoSuchElementException:
-        print("ERROR WHILE TRYING TO FIND THE USERNAME FIELD")
-        browser.quit()
-        sys.exit(1)
+        return
 
     time.sleep(random.randint(1, 3))
 
@@ -472,10 +470,6 @@ with open(current_firm_list) as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
 
-        load_main_page(main_page)
-
-        canvas_login(user, pwd)
-
         config.read("config.ini")
         run_loop = config["DEFAULT"].getboolean("RunLoop")
         download_completed = config["DEFAULT"].getboolean("DownloadCompleted")
@@ -488,6 +482,10 @@ with open(current_firm_list) as csvfile:
             continue
         else:
             row_counter = row_counter + 1
+
+        load_main_page(main_page)
+
+        canvas_login(user, pwd)
 
         company_term = row["Name"]
         company_country = row["C"]
