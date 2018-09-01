@@ -80,14 +80,7 @@ def load_main_page(url):
     print("CONFIGURATION PART")
 
 
-def canvas_login():
-    # Prompt for username and password
-    user = input("PROVIDE YOUR UOB ID: ")
-    print("YOUR USERNAME IS: %s" % user)
-
-    pwd = getpass.getpass("PROVIDE YOUR UOB PASSWORD: ")
-    print("PASSWORD PROVIDED")
-
+def canvas_login(user, pwd):
     time.sleep(random.randint(1, 3))
 
     # Login to canvas using the username and password provided
@@ -466,15 +459,22 @@ else:
 
 print("------------------- LOG --------------------")
 
-load_main_page(main_page)
-
-canvas_login()
-
 row_counter = 1
+
+# Prompt for username and password
+user = input("PROVIDE YOUR UOB ID: ")
+print("YOUR USERNAME IS: %s" % user)
+
+pwd = getpass.getpass("PROVIDE YOUR UOB PASSWORD: ")
+print("PASSWORD PROVIDED")
 
 with open(current_firm_list) as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
+
+        load_main_page(main_page)
+
+        canvas_login(user, pwd)
 
         config.read("config.ini")
         run_loop = config["DEFAULT"].getboolean("RunLoop")
@@ -498,7 +498,6 @@ with open(current_firm_list) as csvfile:
 
         if pi_navigator_search(company_term, company_country) == 0:
             has_information = handle_search_results(company_term, download_completed, text_analysis_completed)
-            browser.get("https://www.filingsexpert.com/")
             #if has_information > 0:
             #    result_csv_dict["INFORMATION"] = "YES"
             #elif has_information == 0:
