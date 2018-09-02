@@ -220,8 +220,11 @@ def pi_navigator_search(company_name, company_country):
         return -1
     else:
         for result in results:
-            browser.execute_script("arguments[0].scrollIntoView(true);", result)
-            result.click()
+            try:
+                browser.execute_script("arguments[0].scrollIntoView(true);", result)
+                result.click()
+            except:
+                pass
 
     time.sleep(random.randint(1, 2))
 
