@@ -22,18 +22,19 @@ canvas_login_username_field_id = "j_username"
 canvas_login_password_field_id = "j_password"
 
 pi_navigator_advanced_css_selector = "#advanced-link > a"
-search_field_activate_css_selector = "body > div.row.no-gutters.advanced-search-row.ng-scope.active > div " \
+search_field_activate_css_selector = "body > div.row.no-gutters.advanced-search-row.active > div " \
                                      "> div.advanced-search > div.content.as-right-panel.guide-target-av-10 " \
                                      "> div > div.row.no-gutters.advanced-search-bar > div.col-md-8 > div " \
-                                     "> div:nth-child(1) > button"
+                                     "> div:nth-child(1) > div"
+
 search_field_css_selector = "#asBox"
 
 results_css_selector = "#lazyLoadSearchResult > div:nth-child(1) > div > div"
 filters_css_selector = "#main-search-panel > div > div.row.no-gutters.criteria-box.message-container > " \
                        "div.col-md-10 > div > div > div > div.header-box-container > " \
-                       "div.bool-box.guide-target-st-1.ng-isolate-scope > div > div > div > a"
+                       "div.bool-box.guide-target-st-1 > div > div > div > a"
 
-search_button_css_selector = "body > div.row.no-gutters.advanced-search-row.ng-scope.active > div > " \
+search_button_css_selector = "body > div.row.no-gutters.advanced-search-row.active > div > " \
                              "div.advanced-search > div.content.as-right-panel.guide-target-av-10 > div " \
                              "> div.row.no-gutters.advanced-search-bar > div.col-md-4 > button"
 
@@ -41,19 +42,19 @@ country_of_incorporation_css_selector = "#cat_country > a"
 
 companies_css_selector = "#cat_company > a"
 
-country_first_result_css_selector = "body > div.row.no-gutters.advanced-search-row.ng-scope.active > div > " \
+country_first_result_css_selector = "body > div.row.no-gutters.advanced-search-row.active > div > " \
                                     "div.advanced-search > div.content.as-right-panel.guide-target-av-10 > div > " \
-                                    "div.ng-scope > div > div.advanced-search-result.guide-target-av-6.ps-container > " \
-                                    "div.ng-scope > div:nth-child(1) > span"
+                                    "div:nth-child(2) > div > div.advanced-search-result.guide-target-av-6.ps-container > " \
+                                    "div:nth-child(1) > div > span"
 
-all_corporate_actions_css_selector = "#main-content-container > div:nth-child(3) > div > div.ng-scope > div > " \
-                                      "div.facet-block-container.ng-isolate-scope > div:nth-child(2) > div > div > " \
-                                      "span.text-elipsis-overflow.name.ng-binding.ng-scope"
+all_corporate_actions_css_selector = "#main-content-container > div:nth-child(3) > div > div > div > " \
+                                      "div.facet-block-container > div:nth-child(2) > div > div > " \
+                                      "span.text-elipsis-overflow.name"
 
-company_filings_and_announcements_css_selector = "#scroll-container-1 > div.ng-scope > ul > li:nth-child(1) > " \
-                                                 "facet-tree > div > a.constraint.text-elipsis-overflow.ng-binding"
+company_filings_and_announcements_css_selector = "#scroll-container-1 > div > ul > li:nth-child(1) > " \
+                                                 "facet-tree > div > a.constraint.text-elipsis-overflow"
 
-article_page_results_css_selector = ".document-row.ng-scope"
+article_page_results_css_selector = ".document-row"
 
 go_to_result_pdf_css_selector = "div > div:nth-child(3) > div.guide-target-vd-6 > a.icon-link.pull-right.downloadLink.icon-pdf"
 
@@ -234,7 +235,7 @@ def pi_navigator_search(company_name, company_country):
         search_button.click()
     except NoSuchElementException:
         try:
-            clear_button = browser.find_element_by_css_selector("#center-panel-scroll-container > div.row.ng-scope > "
+            clear_button = browser.find_element_by_css_selector("#center-panel-scroll-container > div.row > "
                                                                 "div > div.form-title.form-button-bar > div")
             clear_button.click()
             return -1
@@ -275,7 +276,7 @@ def handle_search_results(function_company_term, is_download_completed, is_text_
     if not is_download_completed:
         next_page = browser.find_element_by_css_selector(next_page_css_selector)
 
-        while next_page.get_attribute("class") != "ng-scope disabled":
+        while next_page.get_attribute("class") != "disabled":
 
             article_page_results = browser.find_elements_by_css_selector(article_page_results_css_selector)
             for article_result in article_page_results:
@@ -472,6 +473,10 @@ print("YOUR USERNAME IS: %s" % user)
 pwd = getpass.getpass("PROVIDE YOUR UOB PASSWORD: ")
 print("PASSWORD PROVIDED")
 
+load_main_page(main_page, 1)
+
+canvas_login(user, pwd)
+
 with open(current_firm_list) as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
@@ -489,7 +494,7 @@ with open(current_firm_list) as csvfile:
         else:
             row_counter = row_counter + 1
 
-        load_main_page(main_page)
+        load_main_page(main_page, 2)
 
         canvas_login(user, pwd)
 
